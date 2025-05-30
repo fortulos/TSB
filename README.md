@@ -1,1 +1,313 @@
-# TSB
+-- This script runs on the client only (via executor)
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+local textLabel = Instance.new("TextLabel", screenGui)
+
+textLabel.Size = UDim2.new(0.5, 0, 0.1, 0)
+textLabel.Position = UDim2.new(0.25, 0, 0.9, 0)
+textLabel.TextScaled = true
+textLabel.BackgroundTransparency = 0.4
+textLabel.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+textLabel.Text = "Executing Mercury"
+textLabel.Name = "PrivateMessage"
+
+task.wait(5)
+screenGui:Destroy()
+
+--actual script
+
+local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
+
+local Window = Luna:CreateWindow({
+	Name = "Mercury TSB",
+	Subtitle = nil,
+	LogoID = "82795327169782",
+	LoadingEnabled = true,
+	LoadingTitle = "Mercury Hub",
+	LoadingSubtitle = "by Me",
+
+	ConfigSettings = {
+		RootFolder = nil,
+		ConfigFolder = "Big Hub"
+	},
+
+	KeySystem = false,
+	KeySettings = {
+		Title = "Mercury",
+		Subtitle = "Key System",
+		Note = "Use HWID-based key systems for better security.",
+		SaveInRoot = false,
+		SaveKey = true,
+		Key = {"Le Bron"},
+		SecondAction = {
+			Enabled = false,
+			Type = "Link",
+			Parameter = ""
+		}
+	}
+})
+
+Luna:Notification({ 
+	Title = "Mercury",
+	Icon = "notifications_active",
+	ImageSource = "Material",
+	Content = "Successfully Executed!"
+})
+
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local infJumpEnabled = false
+local MainTab = Window:CreateTab({
+	Name = "Main",
+	Icon = "view_in_ar",
+	ImageSource = "Material",
+	ShowTitle = true
+})
+
+local Toggle = MainTab:CreateToggle({
+	Name = "Infinite Jump",
+	Description = "Toggle infinite jump on/off",
+	CurrentValue = false,
+	Callback = function(Value)
+		infJumpEnabled = Value
+	end
+}, "InfiniteJumpToggle")
+
+-- Infinite jump handler
+UserInputService.JumpRequest:Connect(function()
+	if infJumpEnabled then
+		local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+		local humanoid = character:FindFirstChildOfClass("Humanoid")
+		if humanoid then
+			humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+		end
+	end
+end)
+
+
+
+-- Teleports Tab
+local TeleportsTab = Window:CreateTab({
+	Name = "Teleports",
+	Icon = "view_in_ar",
+	ImageSource = "Material",
+	ShowTitle = true
+})
+
+TeleportsTab:CreateButton({
+	Name = "Atoms",
+	Description = nil,
+	Callback = function()
+		local player = game:GetService("Players").LocalPlayer
+		local character = player.Character or player.CharacterAdded:Wait()
+		local hrp = character:WaitForChild("HumanoidRootPart")
+		local target = workspace:WaitForChild("Cutscenes"):WaitForChild("Atoms"):WaitForChild("sphere")
+		hrp.CFrame = target.CFrame + Vector3.new(0, 5, 0)
+	end
+})
+
+
+TeleportsTab:CreateButton({
+	Name = "Death Counter",
+	Description = nil,
+	Callback = function()
+		local player = game:GetService("Players").LocalPlayer
+		local character = player.Character or player.CharacterAdded:Wait()
+		local hrp = character:WaitForChild("HumanoidRootPart")
+		local target = workspace:WaitForChild("Cutscenes"):WaitForChild("Death Cutscene"):WaitForChild("Shadow")
+		hrp.CFrame = target.CFrame + Vector3.new(0, 5, 0)
+	end
+})
+
+TeleportsTab:CreateButton({
+	Name = "Dummy",
+	Description = nil,
+	Callback = function()
+        -- Wait for local player
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+-- Wait for HumanoidRootPart
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+-- Path to the folder and model in Workspace
+local folder = workspace:WaitForChild("Live")
+local model = folder:WaitForChild("Weakest Dummy") -- Replace with actual model name
+
+-- Make sure the model has a PrimaryPart
+if not model.PrimaryPart then
+    warn("Model has no PrimaryPart!")
+    return
+end
+
+-- Teleport
+hrp.CFrame = model.PrimaryPart.CFrame
+
+	end
+})
+
+
+
+local Tab = Window:CreateTab({
+	Name = "Extra",
+	Icon = "view_in_ar",
+	ImageSource = "Material",
+	ShowTitle = true -- This will determine whether the big header text in the tab will show
+})
+
+Tab:CreateInput({
+	Name = "Set Kills",
+	PlaceholderText = "Enter New Value",
+	RemoveTextAfterFocusLost = true,
+	Callback = function(input)
+		local value = tonumber(input)
+		if not value then
+			warn("Please enter a valid number.")
+			return
+		end
+
+		local player = game:GetService("Players").LocalPlayer
+		local leaderstats = player:FindFirstChild("leaderstats")
+		local kills = leaderstats and leaderstats:FindFirstChild("Kills")
+
+		if kills and (kills:IsA("IntValue") or kills:IsA("NumberValue")) then
+			kills.Value = value
+		else
+			warn("Could not find 'Kills' in leaderstats.")
+		end
+	end
+}, "SetKillsInput")
+
+
+Tab:CreateInput({
+	Name = "Set Total Kills",
+	PlaceholderText = "Enter New Value",
+	RemoveTextAfterFocusLost = true,
+	Callback = function(input)
+		local value = tonumber(input)
+		if not value then
+			warn("Please enter a valid number.")
+			return
+		end
+
+		local player = game:GetService("Players").LocalPlayer
+		local leaderstats = player:FindFirstChild("leaderstats")
+		local totalKills = leaderstats and leaderstats:FindFirstChild("Total Kills")
+
+		if totalKills and (totalKills:IsA("IntValue") or totalKills:IsA("NumberValue")) then
+			totalKills.Value = value
+		else
+			warn("Could not find 'Total Kills' in leaderstats.")
+		end
+	end
+}, "SetTotalKillsInput")
+
+
+local espEnabled = false
+local espConnections = {}
+
+Tab:CreateToggle({
+	Name = "ESP",
+	Description = "Toggle Player ESP On/Off",
+	CurrentValue = false,
+	Callback = function(value)
+		espEnabled = value
+
+		if value then
+			-- Create ESP tag
+			local function createESP(target)
+				if target:FindFirstChild("Head") and not target:FindFirstChild("ESP") then
+					local esp = Instance.new("BillboardGui", target)
+					esp.Name = "ESP"
+					esp.Adornee = target.Head
+					esp.Size = UDim2.new(0, 100, 0, 40)
+					esp.StudsOffset = Vector3.new(0, 2, 0)
+					esp.AlwaysOnTop = true
+
+					local textLabel = Instance.new("TextLabel", esp)
+					textLabel.Size = UDim2.new(1, 0, 1, 0)
+					textLabel.BackgroundTransparency = 1
+					textLabel.Text = target.Name
+					textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+					textLabel.TextStrokeTransparency = 0.5
+					textLabel.Font = Enum.Font.SourceSansBold
+					textLabel.TextScaled = true
+				end
+			end
+
+			-- Enable ESP
+			for _, player in pairs(game.Players:GetPlayers()) do
+				if player ~= game.Players.LocalPlayer and player.Character then
+					createESP(player.Character)
+					local conn = player.CharacterAdded:Connect(function(char)
+						wait(1)
+						createESP(char)
+					end)
+					table.insert(espConnections, conn)
+				end
+			end
+
+			local conn = game.Players.PlayerAdded:Connect(function(player)
+				local c = player.CharacterAdded:Connect(function(char)
+					wait(1)
+					createESP(char)
+				end)
+				table.insert(espConnections, c)
+			end)
+			table.insert(espConnections, conn)
+		else
+			-- Disable ESP
+			for _, player in pairs(game.Players:GetPlayers()) do
+				if player.Character then
+					local esp = player.Character:FindFirstChild("ESP")
+					if esp then
+						esp:Destroy()
+					end
+				end
+			end
+			for _, conn in pairs(espConnections) do
+				pcall(function() conn:Disconnect() end)
+			end
+			espConnections = {}
+		end
+	end
+})
+
+-- FOV Input
+Tab:CreateInput({
+	Name = "Set FOV",
+	Description = "Enter a number to change your camera FOV",
+	PlaceholderText = "e.g. 70",
+	RemoveTextAfterFocusLost = false,
+	Callback = function(input)
+		local fov = tonumber(input)
+		if fov then
+			game.Workspace.CurrentCamera.FieldOfView = fov
+		else
+			warn("Invalid FOV input: must be a number")
+		end
+	end
+})
+
+-- FOV Reset Button
+Tab:CreateButton({
+	Name = "Reset FOV",
+	Description = "Reset your camera FOV to default (70)",
+	Callback = function()
+		game.Workspace.CurrentCamera.FieldOfView = 70
+	end
+})
+
+local Button = Tab:CreateButton({
+	Name = "Sit",
+	Description = nil, -- Creates A Description For Users to know what the button does (looks bad if you use it all the time),
+    	Callback = function()
+         game.Players.LocalPlayer.Character.Humanoid.Sit = true
+    	end
+})
+
