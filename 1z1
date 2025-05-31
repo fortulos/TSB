@@ -211,7 +211,7 @@ Tab:CreateInput({
 local espEnabled = false
 local espConnections = {}
 
-Tab:CreateToggle({
+MainTab:CreateToggle({
 	Name = "ESP",
 	Description = "Toggle Player ESP On/Off",
 	CurrentValue = false,
@@ -311,3 +311,35 @@ local Button = Tab:CreateButton({
     	end
 })
 
+Window:CreateHomeTab({
+	SupportedExecutors = {}, -- A Table Of Executors Your Script Supports. Add strings of the executor names for each executor.
+	DiscordInvite = "1234", -- The Discord Invite Link. Do Not Include discord.gg/ | Only Include the code.
+	Icon = 1, -- By Default, The Icon Is The Home Icon. If You would like to change it to dashboard, replace the interger with 2
+})
+
+local Button = TeleportsTab:CreateButton({
+	Name = "Mountains",
+	Description = nil, -- Creates A Description For Users to know what the button does (looks bad if you use it all the time),
+    	Callback = function()
+         -- Adjust these names to match your game's structure
+local folder = workspace:WaitForChild("Map")
+local subfolder = folder:WaitForChild("GrassTop")
+local part = subfolder:WaitForChild("Part")
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+-- Teleport with slight Y offset to avoid clipping into the ground
+hrp.CFrame = part.CFrame + Vector3.new(0, 5, 0)
+
+    	end
+})
+
+local Button = Tab:CreateButton({
+	Name = "Fling All",
+	Description = nil, -- Creates A Description For Users to know what the button does (looks bad if you use it all the time),
+    	Callback = function()
+         loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))()
+    	end
+})
